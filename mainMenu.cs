@@ -69,7 +69,7 @@ namespace BankManagement
             }
         }
 
-        //Show all accounts
+        //Show all accounts 
         private void btnShowAllAccounts_Click(object sender, EventArgs e)
         {
             string sql = "SELECT customer.title AS Title, customer.firstname AS FirstName, customer.lastname AS LastName," + 
@@ -84,6 +84,7 @@ namespace BankManagement
             dtgAccounts.DataSource = dtCustomerOrders;
         }
 
+        //Display data from selected row in new form
         private void dtgAccounts_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
          
