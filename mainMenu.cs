@@ -34,17 +34,31 @@ namespace BankManagement
         //Search on First Name basis --- Change to different search method
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            string sql = "SELECT customer.title AS Title, customer.firstname AS FirstName, customer.lastname AS LastName," +
-                "customer.dob AS DOB, customer.natins AS Nationality, customer.email AS Email, customer.allowance AS Allowance FROM customer WHERE firstname = @firstname;";
+            if (myConn.State == ConnectionState.Open)
+            {
+                MessageBox.Show("Open");
+            }
+            else
+            {
+                try
+                {
+                    string sql = "SELECT customer.title AS Title, customer.firstname AS FirstName, customer.lastname AS LastName," +
+                    "customer.dob AS DOB, customer.natins AS Nationality, customer.email AS Email, customer.allowance AS Allowance FROM customer WHERE firstname = @firstname;";
 
 
-            daCustomerOrders = new OleDbDataAdapter(sql, myConn);
-            daCustomerOrders.SelectCommand.Parameters.AddWithValue("@firstname", txtSearch.Text);
+                    daCustomerOrders = new OleDbDataAdapter(sql, myConn);
+                    daCustomerOrders.SelectCommand.Parameters.AddWithValue("@firstname", txtSearch.Text);
 
-            dtCustomerOrders = new DataTable();
-            daCustomerOrders.Fill(dtCustomerOrders);
+                    dtCustomerOrders = new DataTable();
+                    daCustomerOrders.Fill(dtCustomerOrders);
 
-            dtgAccounts.DataSource = dtCustomerOrders;
+                    dtgAccounts.DataSource = dtCustomerOrders;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
         //Reset Search Text Box after first time use - click
@@ -60,6 +74,101 @@ namespace BankManagement
             }
         }
 
+
+        //Show all Customers
+        private void btnShowAllAccounts_Click(object sender, EventArgs e)
+        {
+            if (myConn.State == ConnectionState.Open)
+            {
+                MessageBox.Show("Open");
+            }
+            else
+            {
+                try
+                {
+                    string sql = "SELECT customer.custID AS CNO, customer.title AS Title, customer.firstname AS FirstName, customer.lastname AS LastName, customer.allowance AS CustomerAllowance, " +
+                    "customer.dob AS DOB, customer.natins AS Nationality, customer.email AS Email FROM customer;";
+
+
+                    daCustomerOrders = new OleDbDataAdapter(sql, myConn);
+
+                    dtCustomerOrders = new DataTable();
+                    daCustomerOrders.Fill(dtCustomerOrders);
+
+                    dtgAccounts.DataSource = dtCustomerOrders;
+
+                    //Calculate remaining tax
+
+
+                    //Hide 'ID' column
+                    this.dtgAccounts.Columns["CNO"].Visible = false;
+
+
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+
+        //Show all accounts for individual customers
+        private void viewAccountsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (myConn.State == ConnectionState.Open)
+            {
+                MessageBox.Show("Open");
+            }
+            else
+            {
+                try
+                {
+                    string sql = "SELECT customer.custID AS CNO, product.name, account.balance, account.accrued AS InterestAccrued  FROM product INNER JOIN " +
+                        "(customer INNER JOIN account ON customer.custID = account.custID) ON product.prodID = account.prodID WHERE (((customer.custID) = @custID));";
+
+
+                    daCustomerOrders = new OleDbDataAdapter(sql, myConn);
+                    daCustomerOrders.SelectCommand.Parameters.AddWithValue("@custID", DbConnection.custID);
+                    dtCustomerOrders = new DataTable();
+                    daCustomerOrders.Fill(dtCustomerOrders);
+                    
+
+                    dtgAccounts.DataSource = dtCustomerOrders;
+                    //Hide 'ID' column
+                    this.dtgAccounts.Columns["CNO"].Visible = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        //Select Row in dataGrid with right mouse 
+        private void dtgAccounts_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            myConn.ConnectionString = DbConnection.dbConnect;
+            if (e.Button == MouseButtons.Right)
+            {
+                // Add this
+                dtgAccounts.CurrentCell = dtgAccounts.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                dtgAccounts.Rows[e.RowIndex].Selected = true;
+                dtgAccounts.Focus();
+
+                DbConnection.custID = dtgAccounts[0, e.RowIndex].Value.ToString();
+            }
+        }
+
+        //Open ISA Products Form and show all available ISA's
+        private void btnIsa_Click(object sender, EventArgs e)
+        {
+            IsaProducts isaForm = new IsaProducts();
+            isaForm.Show();
+        }
+
         //Exit Button
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -69,25 +178,58 @@ namespace BankManagement
             }
         }
 
-        //Show all accounts 
-        private void btnShowAllAccounts_Click(object sender, EventArgs e)
+        /*Sort Customers based on remaining tax allowance -- Needs 'if' statement to check if column containing "customerallowance" exists
+        private void txtBalance_Click(object sender, EventArgs e)
         {
-            string sql = "SELECT customer.title AS Title, customer.firstname AS FirstName, customer.lastname AS LastName," + 
-                "customer.dob AS DOB, customer.natins AS Nationality, customer.email AS Email, customer.allowance AS Allowance FROM customer;";
+            if (dtgAccounts.Rows.Count == 0)
+            {
+                MessageBox.Show("Please select customer accounts");
+            }
+            else
+            {
+                this.dtgAccounts.Sort(this.dtgAccounts.Columns["CustomerAllowance"], ListSortDirection.Descending);
+            }
+        }*/
 
 
-            daCustomerOrders = new OleDbDataAdapter(sql, myConn);
+        //View transactions per customer
+        private void viewTransactionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (myConn.State == ConnectionState.Open)
+            {
+                MessageBox.Show("Open");
+            }
+            else
+            {
+                try
+                {
+                    string sql = "SELECT customer.custID, product.name AS ISAProduct, account.balance, tranx.action, tranx.amnt AS Amount£, tranx.event AS DateOfTransaction FROM(product INNER " + "" +
+                                "JOIN(customer INNER JOIN account ON customer.custID = account.custID) ON product.prodID = account.prodID) INNER JOIN tranx ON account.accID = tranx.accID " +
+                                "WHERE(((customer.custID) = @custID));";
 
-            dtCustomerOrders = new DataTable();
-            daCustomerOrders.Fill(dtCustomerOrders);
 
-            dtgAccounts.DataSource = dtCustomerOrders;
+                    daCustomerOrders = new OleDbDataAdapter(sql, myConn);
+                    daCustomerOrders.SelectCommand.Parameters.AddWithValue("@custID", DbConnection.custID);
+                    dtCustomerOrders = new DataTable();
+                    daCustomerOrders.Fill(dtCustomerOrders);
+                    
+                    dtgAccounts.DataSource = dtCustomerOrders;
+                    //Hide 'ID' column
+                    this.dtgAccounts.Columns["custID"].Visible = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
-        //Display data from selected row in new form
-        private void dtgAccounts_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+
+        //Show Tax Calculation Form
+        private void btnCalcInterest_Click(object sender, EventArgs e)
         {
-         
+            TaxCalculation taxCal = new TaxCalculation ();
+            taxCal.Show();
         }
     }
 }

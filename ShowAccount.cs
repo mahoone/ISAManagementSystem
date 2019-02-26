@@ -24,9 +24,14 @@ namespace BankManagement
         private void ShowAccount_Load(object sender, EventArgs e)
         {
             myConn.ConnectionString = DbConnection.dbConnect;
-            txtIdShow.Text = DbConnection.custid;
+            txtIdShow.Text = DbConnection.custID;
             txtNameShow.Text = DbConnection.firstName;
             txtSurnameShow.Text = DbConnection.lastName;
+        }
+
+        private void txtIdShow_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

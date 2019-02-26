@@ -47,11 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbConnection.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="IsaProducts.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="IsaProducts.Designer.cs">
+      <DependentUpon>IsaProducts.cs</DependentUpon>
     </Compile>
     <Compile Include="mainMenu.cs">
       <SubType>Form</SubType>
@@ -67,14 +67,14 @@
     <Compile Include="ShowAccount.Designer.cs">
       <DependentUpon>ShowAccount.cs</DependentUpon>
     </Compile>
-    <Compile Include="viewCustomers.cs">
+    <Compile Include="TaxCalculation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="viewCustomers.Designer.cs">
-      <DependentUpon>viewCustomers.cs</DependentUpon>
+    <Compile Include="TaxCalculation.Designer.cs">
+      <DependentUpon>TaxCalculation.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="IsaProducts.resx">
+      <DependentUpon>IsaProducts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="mainMenu.resx">
       <DependentUpon>mainMenu.cs</DependentUpon>
@@ -92,8 +92,8 @@
     <EmbeddedResource Include="ShowAccount.resx">
       <DependentUpon>ShowAccount.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="viewCustomers.resx">
-      <DependentUpon>viewCustomers.cs</DependentUpon>
+    <EmbeddedResource Include="TaxCalculation.resx">
+      <DependentUpon>TaxCalculation.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
