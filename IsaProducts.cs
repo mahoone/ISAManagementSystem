@@ -124,7 +124,7 @@ namespace BankManagement
             }
         }
 
-        //Exit form
+        // Exit form
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
