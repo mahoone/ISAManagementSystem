@@ -64,7 +64,7 @@ namespace BankManagement
             }
         }
 
-        //Populate TextBoxes with data from DTG after row is clicked
+        // Populate TextBoxes with data from DTG after row is clicked
         private void dtgIsa_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (dtgIsa.SelectedRows.Count > 0) // make sure user select at least 1 row 
