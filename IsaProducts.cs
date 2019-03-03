@@ -18,19 +18,19 @@ namespace BankManagement
             InitializeComponent();
         }
 
-        //Database connection
+        // Database connection
         OleDbConnection myConn = new OleDbConnection();
         DataTable dtCustomerOrders = null;
         OleDbDataAdapter daCustomerOrders = null;
         DataSet myDS = new DataSet();
 
-        //Populate DTG with ISA Products from Database
+        // Populate DTG with ISA Products from Database
         private void IsaProducts_Load(object sender, EventArgs e)
         {
             load_data();
         }
 
-        //Load all ISA products
+        // Load all ISA products
         private void load_data()
         {
             if (myConn.State == ConnectionState.Open)
