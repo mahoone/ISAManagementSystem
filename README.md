@@ -7,6 +7,7 @@ MS Access database used to store and manage information relating to ISA savings 
 ## Main Form
 
 Main form allows user to list all customers, view their accounts and transactions.
+Added basic search functionality.
 
 ![mainform](https://user-images.githubusercontent.com/29840139/53693191-008a5d00-3d95-11e9-82bb-3c4f38f01dfb.PNG)
 
