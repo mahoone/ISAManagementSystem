@@ -82,7 +82,7 @@ namespace BankManagement
             }
         }
 
-        //Save any changes to database
+        // Save any changes to database
         private void btnIsaSave_Click(object sender, EventArgs e)
         {
             if (myConn.State == ConnectionState.Open)
