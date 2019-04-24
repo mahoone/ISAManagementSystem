@@ -31,15 +31,15 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaxCalculation));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnCalcInterest = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.dtgShowTrans = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.viewAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewTransactionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtAnnualInterest = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.txtTotalAnnual = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtProduct = new System.Windows.Forms.TextBox();
@@ -49,18 +49,20 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtIsaTfr = new System.Windows.Forms.TextBox();
+            this.txtAccrued = new System.Windows.Forms.TextBox();
             this.txtCustSurname = new System.Windows.Forms.TextBox();
+            this.errorProvider2 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgShowTrans)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(45)))), ((int)(((byte)(72)))));
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.btnCalcInterest);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.btnExit);
@@ -69,6 +71,20 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 460);
             this.panel1.TabIndex = 3;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(12, 426);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(31, 22);
+            this.button1.TabIndex = 10;
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnCalcInterest
             // 
@@ -80,7 +96,7 @@
             this.btnCalcInterest.Name = "btnCalcInterest";
             this.btnCalcInterest.Size = new System.Drawing.Size(200, 34);
             this.btnCalcInterest.TabIndex = 9;
-            this.btnCalcInterest.Text = "Calculate Annual";
+            this.btnCalcInterest.Text = "Show All Accounts";
             this.btnCalcInterest.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -88,11 +104,11 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Open Sans SemiBold", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label2.Location = new System.Drawing.Point(63, 33);
+            this.label2.Location = new System.Drawing.Point(39, 33);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 14);
+            this.label2.Size = new System.Drawing.Size(119, 14);
             this.label2.TabIndex = 8;
-            this.label2.Text = "INTEREST";
+            this.label2.Text = "INTEREST CALCULATOR";
             // 
             // btnExit
             // 
@@ -121,7 +137,6 @@
             // 
             this.dtgShowTrans.BackgroundColor = System.Drawing.Color.White;
             this.dtgShowTrans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgShowTrans.ContextMenuStrip = this.contextMenuStrip1;
             this.dtgShowTrans.Location = new System.Drawing.Point(0, 3);
             this.dtgShowTrans.MultiSelect = false;
             this.dtgShowTrans.Name = "dtgShowTrans";
@@ -130,30 +145,12 @@
             this.dtgShowTrans.ShowEditingIcon = false;
             this.dtgShowTrans.Size = new System.Drawing.Size(663, 270);
             this.dtgShowTrans.TabIndex = 0;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewAccountsToolStripMenuItem,
-            this.viewTransactionsToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(169, 48);
-            // 
-            // viewAccountsToolStripMenuItem
-            // 
-            this.viewAccountsToolStripMenuItem.Name = "viewAccountsToolStripMenuItem";
-            this.viewAccountsToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.viewAccountsToolStripMenuItem.Text = "View Accounts";
-            // 
-            // viewTransactionsToolStripMenuItem
-            // 
-            this.viewTransactionsToolStripMenuItem.Name = "viewTransactionsToolStripMenuItem";
-            this.viewTransactionsToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.viewTransactionsToolStripMenuItem.Text = "View Transactions";
+            this.dtgShowTrans.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dtgShowTrans_CellMouseClick);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtAnnualInterest);
+            this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.txtTotalAnnual);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.txtProduct);
@@ -163,7 +160,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.txtIsaTfr);
+            this.groupBox1.Controls.Add(this.txtAccrued);
             this.groupBox1.Controls.Add(this.txtCustSurname);
             this.groupBox1.Location = new System.Drawing.Point(206, 293);
             this.groupBox1.Name = "groupBox1";
@@ -172,9 +169,27 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Annual Tax";
             // 
+            // txtAnnualInterest
+            // 
+            this.txtAnnualInterest.Location = new System.Drawing.Point(107, 89);
+            this.txtAnnualInterest.Name = "txtAnnualInterest";
+            this.txtAnnualInterest.Size = new System.Drawing.Size(121, 20);
+            this.txtAnnualInterest.TabIndex = 15;
+            this.txtAnnualInterest.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAnnualInterest_KeyPress);
+            this.txtAnnualInterest.Validating += new System.ComponentModel.CancelEventHandler(this.txtAnnualInterest_Validating);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 92);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(78, 13);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "Annual Interest";
+            // 
             // txtTotalAnnual
             // 
-            this.txtTotalAnnual.Location = new System.Drawing.Point(107, 85);
+            this.txtTotalAnnual.Location = new System.Drawing.Point(387, 85);
             this.txtTotalAnnual.Name = "txtTotalAnnual";
             this.txtTotalAnnual.ReadOnly = true;
             this.txtTotalAnnual.Size = new System.Drawing.Size(121, 20);
@@ -183,11 +198,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 88);
+            this.label6.Location = new System.Drawing.Point(265, 88);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(69, 13);
+            this.label6.Size = new System.Drawing.Size(112, 13);
             this.label6.TabIndex = 12;
-            this.label6.Text = "Total Interest";
+            this.label6.Text = "Total Accrued Interest";
             // 
             // txtProduct
             // 
@@ -251,12 +266,13 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Customer Name";
             // 
-            // txtIsaTfr
+            // txtAccrued
             // 
-            this.txtIsaTfr.Location = new System.Drawing.Point(387, 54);
-            this.txtIsaTfr.Name = "txtIsaTfr";
-            this.txtIsaTfr.Size = new System.Drawing.Size(121, 20);
-            this.txtIsaTfr.TabIndex = 3;
+            this.txtAccrued.Location = new System.Drawing.Point(387, 54);
+            this.txtAccrued.Name = "txtAccrued";
+            this.txtAccrued.ReadOnly = true;
+            this.txtAccrued.Size = new System.Drawing.Size(121, 20);
+            this.txtAccrued.TabIndex = 3;
             // 
             // txtCustSurname
             // 
@@ -265,6 +281,10 @@
             this.txtCustSurname.ReadOnly = true;
             this.txtCustSurname.Size = new System.Drawing.Size(121, 20);
             this.txtCustSurname.TabIndex = 0;
+            // 
+            // errorProvider2
+            // 
+            this.errorProvider2.ContainerControl = this;
             // 
             // TaxCalculation
             // 
@@ -282,9 +302,9 @@
             this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtgShowTrans)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -297,20 +317,21 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGridView dtgShowTrans;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem viewAccountsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewTransactionsToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnTaxCalculate;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtIsaTfr;
+        private System.Windows.Forms.TextBox txtAccrued;
         private System.Windows.Forms.TextBox txtCustSurname;
         private System.Windows.Forms.TextBox txtBalance;
         private System.Windows.Forms.TextBox txtProduct;
         private System.Windows.Forms.TextBox txtTotalAnnual;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtAnnualInterest;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ErrorProvider errorProvider2;
     }
 }

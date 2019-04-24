@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using System.Text.RegularExpressions;
 
 namespace BankManagement
 {
@@ -41,7 +42,6 @@ namespace BankManagement
             {
                 try
                 {
-                    //Establish connection on form load
                     myConn.ConnectionString = DbConnection.dbConnect;
 
                     string sql = "SELECT product.prodID AS IsaIndex, product.name AS Product, product.status AS Status , product.transin AS TransferAllowed, product.intrate AS TaxFreeRate FROM product; ";
@@ -82,6 +82,7 @@ namespace BankManagement
             }
         }
 
+
         // Save any changes to database
         private void btnIsaSave_Click(object sender, EventArgs e)
         {
@@ -93,30 +94,48 @@ namespace BankManagement
             {
                 try
                 {
-                    if (cbIsaStatus.Text != "" && cbIsaTranAllow.Text != "" && txtIsaTfr.Text != "")
+                    //If validation successfull - show message to user
+                    if (ValidateChildren(ValidationConstraints.Enabled))
                     {
-                        string sql = @"UPDATE product Set status = @status, transin = @transin, intrate = @rate WHERE prodID = @prodID;";
+                        //Regular expression validation 
+                        string expression = @"^(0*100{1,1}\.?((?<=\.)0*)?%?$)|(^0*\d{0,2}\.?((?<=\.)\d*)?%?)$";
+                        Regex objNotNumberPattern = new Regex(expression);
+                        if (objNotNumberPattern.IsMatch(txtIsaTfr.Text))
+                        {
+                            //Additional validation for IsaTfr textbox; convert values and then save up to 2 decimal places
+                            string taxFromTextBox = txtIsaTfr.Text;
+                            decimal convertedTax = Convert.ToDecimal(taxFromTextBox);
+                            string convertedStringTax = convertedTax.ToString("0.00");
 
-                        daCustomerOrders = new OleDbDataAdapter(sql, myConn);
-                        daCustomerOrders.SelectCommand.Parameters.AddWithValue("@status", cbIsaStatus.Text);
-                        daCustomerOrders.SelectCommand.Parameters.AddWithValue("@transin", cbIsaTranAllow.Text);
-                        daCustomerOrders.SelectCommand.Parameters.AddWithValue("@rate", txtIsaTfr.Text);
-                        daCustomerOrders.SelectCommand.Parameters.AddWithValue("@prodID", DbConnection.prodID);
-                        dtCustomerOrders = new DataTable();
-                        daCustomerOrders.Fill(dtCustomerOrders);
 
-                        dtgIsa.DataSource = dtCustomerOrders;
-                        load_data();
-                        MessageBox.Show("Record Updated Successfully");
+                            string sql = @"UPDATE product Set status = @status, transin = @transin, intrate = @rate WHERE prodID = @prodID;";
 
-                        dtgIsa.Refresh();
+                            daCustomerOrders = new OleDbDataAdapter(sql, myConn);
+                            daCustomerOrders.SelectCommand.Parameters.AddWithValue("@status", cbIsaStatus.Text);
+                            daCustomerOrders.SelectCommand.Parameters.AddWithValue("@transin", cbIsaTranAllow.Text);
+                            daCustomerOrders.SelectCommand.Parameters.AddWithValue("@rate", convertedStringTax);
+                            daCustomerOrders.SelectCommand.Parameters.AddWithValue("@prodID", DbConnection.prodID);
+                            dtCustomerOrders = new DataTable();
+                            daCustomerOrders.Fill(dtCustomerOrders);
+
+                            dtgIsa.DataSource = dtCustomerOrders;
+                            load_data();
+                            dtgIsa.Refresh();
+
+                            MessageBox.Show("Current Tax Free Rate for " + txtIsaProduct.Text + " is " + convertedStringTax + "%", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Please enter percentage values only");
+                        }
                     }
+                    
                     else
                     {
                         MessageBox.Show("Please Select Record To Update");
                     }
-                }
 
+                }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
@@ -129,7 +148,44 @@ namespace BankManagement
         {
             this.Close();
         }
+
+        // Textbox validation for tax free textbox
+        private void txtIsaTfr_Validating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtIsaTfr.Text))
+            {
+                e.Cancel = true;
+                txtIsaTfr.Focus();
+                errorProvider.SetError(txtIsaTfr, "Please enter valid Tax Free Rate in %");
+            }
+            else
+            {
+                e.Cancel = false;
+                errorProvider.SetError(txtIsaTfr, null);
+                errorProvider.Clear();
+            }
+        }
+
+
+        // Additional textbox validation
+        private void txtIsaTfr_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            {
+                if (!char.IsControl(e.KeyChar)
+                    && !char.IsDigit(e.KeyChar)
+                    && e.KeyChar != '.')
+                {
+                    e.Handled = true;
+                }
+
+                // only allow one decimal point
+                if (e.KeyChar == '.'
+                    && (sender as TextBox).Text.IndexOf('.') > -1)
+                {
+                    e.Handled = true;
+                }
+            }
+        } 
     }
 }
-
 

@@ -30,8 +30,28 @@ namespace BankManagement
             myConn.ConnectionString = DbConnection.dbConnect;
         }
 
+        //Open ISA Products Form and show all available ISA's
+        private void btnIsa_Click(object sender, EventArgs e)
+        {
+            IsaProducts isaForm = new IsaProducts();
+            isaForm.Show();
+        }
 
-        //Search on First Name basis --- Change to different search method
+        //Open Tax Calculation Form
+        private void btnCalcInterest_Click(object sender, EventArgs e)
+        {
+            TaxCalculation taxCal = new TaxCalculation();
+            taxCal.Show();
+        }
+
+        //Open TotalForIsa form
+        private void btnCalTotalIsa_Click(object sender, EventArgs e)
+        {
+            TotalForIsa totalForIsa = new TotalForIsa();
+            totalForIsa.Show();
+        }
+
+        //Search for customers
         private void btnSearch_Click(object sender, EventArgs e)
         {
             if (myConn.State == ConnectionState.Open)
@@ -43,11 +63,15 @@ namespace BankManagement
                 try
                 {
                     string sql = "SELECT customer.title AS Title, customer.firstname AS FirstName, customer.lastname AS LastName," +
-                    "customer.dob AS DOB, customer.natins AS Nationality, customer.email AS Email, customer.allowance AS Allowance FROM customer WHERE firstname = @firstname;";
+                    "customer.dob AS DOB, customer.natins AS Nationality, customer.email AS Email, customer.allowance AS Allowance FROM customer " +
+                    "WHERE firstname = @firstname OR lastname = @lastname OR natins = @natins OR email = @email;";
 
 
                     daCustomerOrders = new OleDbDataAdapter(sql, myConn);
                     daCustomerOrders.SelectCommand.Parameters.AddWithValue("@firstname", txtSearch.Text);
+                    daCustomerOrders.SelectCommand.Parameters.AddWithValue("@lastname", txtSearch.Text);
+                    daCustomerOrders.SelectCommand.Parameters.AddWithValue("@natins", txtSearch.Text);
+                    daCustomerOrders.SelectCommand.Parameters.AddWithValue("@email", txtSearch.Text);
 
                     dtCustomerOrders = new DataTable();
                     daCustomerOrders.Fill(dtCustomerOrders);
@@ -97,13 +121,8 @@ namespace BankManagement
 
                     dtgAccounts.DataSource = dtCustomerOrders;
 
-                    //Calculate remaining tax
-
-
                     //Hide 'ID' column
                     this.dtgAccounts.Columns["CNO"].Visible = false;
-
-
                 }
 
                 catch (Exception ex)
@@ -112,6 +131,7 @@ namespace BankManagement
                 }
             }
         }
+
 
 
         //Show all accounts for individual customers
@@ -146,6 +166,8 @@ namespace BankManagement
             }
         }
 
+
+
         //Select Row in dataGrid with right mouse 
         private void dtgAccounts_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -162,35 +184,7 @@ namespace BankManagement
             }
         }
 
-        //Open ISA Products Form and show all available ISA's
-        private void btnIsa_Click(object sender, EventArgs e)
-        {
-            IsaProducts isaForm = new IsaProducts();
-            isaForm.Show();
-        }
-
-        //Exit Button
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Are You Sure You Want To Exit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                Application.Exit();
-            }
-        }
-
-        /*Sort Customers based on remaining tax allowance -- Needs 'if' statement to check if column containing "customerallowance" exists
-        private void txtBalance_Click(object sender, EventArgs e)
-        {
-            if (dtgAccounts.Rows.Count == 0)
-            {
-                MessageBox.Show("Please select customer accounts");
-            }
-            else
-            {
-                this.dtgAccounts.Sort(this.dtgAccounts.Columns["CustomerAllowance"], ListSortDirection.Descending);
-            }
-        }*/
-
+       
 
         //View transactions per customer
         private void viewTransactionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -205,7 +199,7 @@ namespace BankManagement
                 {
                     string sql = "SELECT customer.custID, product.name AS ISAProduct, account.balance, tranx.action, tranx.amnt AS Amount£, tranx.event AS DateOfTransaction FROM(product INNER " + "" +
                                 "JOIN(customer INNER JOIN account ON customer.custID = account.custID) ON product.prodID = account.prodID) INNER JOIN tranx ON account.accID = tranx.accID " +
-                                "WHERE(((customer.custID) = @custID));";
+                                "WHERE(((customer.custID) = @custID)) ORDER BY tranx.event DESC;";
 
 
                     daCustomerOrders = new OleDbDataAdapter(sql, myConn);
@@ -225,11 +219,14 @@ namespace BankManagement
         }
 
 
-        //Show Tax Calculation Form
-        private void btnCalcInterest_Click(object sender, EventArgs e)
+
+        //Exit Button
+        private void btnExit_Click(object sender, EventArgs e)
         {
-            TaxCalculation taxCal = new TaxCalculation ();
-            taxCal.Show();
-        }
+            if (MessageBox.Show("Are You Sure You Want To Exit?", "Exit", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                Application.Exit();
+            }
+        } 
     }
 }
